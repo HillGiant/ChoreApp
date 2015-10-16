@@ -1,0 +1,197 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.4.4
+-- Dumped by pg_dump version 9.4.4
+-- Started on 2015-10-15 17:13:28
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 2010 (class 1262 OID 16393)
+-- Name: ChoreTracker; Type: DATABASE; Schema: -; Owner: Service
+--
+
+CREATE DATABASE "ChoreTracker" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'English_United States.1252' LC_CTYPE = 'English_United States.1252';
+
+
+ALTER DATABASE "ChoreTracker" OWNER TO "Service";
+
+\connect "ChoreTracker"
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 176 (class 3079 OID 11855)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2013 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 175 (class 1259 OID 16430)
+-- Name: Chore; Type: TABLE; Schema: public; Owner: Service; Tablespace: 
+--
+
+CREATE TABLE "Chore" (
+    "ChoreId" integer NOT NULL,
+    "Title" character varying(255),
+    "DueBy" date
+);
+
+
+ALTER TABLE "Chore" OWNER TO "Service";
+
+--
+-- TOC entry 174 (class 1259 OID 16428)
+-- Name: Chore_ChoreId_seq; Type: SEQUENCE; Schema: public; Owner: Service
+--
+
+CREATE SEQUENCE "Chore_ChoreId_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Chore_ChoreId_seq" OWNER TO "Service";
+
+--
+-- TOC entry 2015 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: Chore_ChoreId_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Service
+--
+
+ALTER SEQUENCE "Chore_ChoreId_seq" OWNED BY "Chore"."ChoreId";
+
+
+--
+-- TOC entry 173 (class 1259 OID 16409)
+-- Name: TodoItem; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE "TodoItem" (
+    "TodoItemID" bigint NOT NULL,
+    "TodoItemGuid" uuid,
+    "Description" character varying(255),
+    "UserId" bigint
+);
+
+
+ALTER TABLE "TodoItem" OWNER TO postgres;
+
+--
+-- TOC entry 172 (class 1259 OID 16394)
+-- Name: User; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE "User" (
+    "UserId" bigint NOT NULL,
+    "UserGuid" uuid,
+    "Name" character varying(255)
+);
+
+
+ALTER TABLE "User" OWNER TO postgres;
+
+--
+-- TOC entry 1889 (class 2604 OID 16433)
+-- Name: ChoreId; Type: DEFAULT; Schema: public; Owner: Service
+--
+
+ALTER TABLE ONLY "Chore" ALTER COLUMN "ChoreId" SET DEFAULT nextval('"Chore_ChoreId_seq"'::regclass);
+
+
+--
+-- TOC entry 1893 (class 2606 OID 16413)
+-- Name: PF_TodoItem; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY "TodoItem"
+    ADD CONSTRAINT "PF_TodoItem" PRIMARY KEY ("TodoItemID");
+
+
+--
+-- TOC entry 1895 (class 2606 OID 16435)
+-- Name: PK_Chore; Type: CONSTRAINT; Schema: public; Owner: Service; Tablespace: 
+--
+
+ALTER TABLE ONLY "Chore"
+    ADD CONSTRAINT "PK_Chore" PRIMARY KEY ("ChoreId");
+
+
+--
+-- TOC entry 1891 (class 2606 OID 16398)
+-- Name: PK_UserId; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY "User"
+    ADD CONSTRAINT "PK_UserId" PRIMARY KEY ("UserId");
+
+
+--
+-- TOC entry 1896 (class 2606 OID 16414)
+-- Name: FK_TodoItem_User; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "TodoItem"
+    ADD CONSTRAINT "FK_TodoItem_User" FOREIGN KEY ("UserId") REFERENCES "User"("UserId");
+
+
+--
+-- TOC entry 2012 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- TOC entry 2014 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: Chore; Type: ACL; Schema: public; Owner: Service
+--
+
+REVOKE ALL ON TABLE "Chore" FROM PUBLIC;
+REVOKE ALL ON TABLE "Chore" FROM "Service";
+GRANT ALL ON TABLE "Chore" TO "Service";
+
+
+-- Completed on 2015-10-15 17:13:28
+
+--
+-- PostgreSQL database dump complete
+--
+
